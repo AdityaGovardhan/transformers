@@ -328,7 +328,8 @@ def convert_examples_to_features(
                     "you need to try to use a bigger max seq length!"
                 )
 
-            input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
+            # input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
+            input_ids, token_type_ids = inputs["input_ids"], inputs["attention_mask"]
 
             # The mask has 1 for real tokens and 0 for padding tokens. Only real
             # tokens are attended to.
