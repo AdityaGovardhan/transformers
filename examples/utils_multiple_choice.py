@@ -26,6 +26,7 @@ from typing import List
 import tqdm
 
 from transformers import PreTrainedTokenizer
+from text_rank_reduction import Reduction
 
 
 logger = logging.getLogger(__name__)
@@ -290,7 +291,6 @@ class ArcProcessor(DataProcessor):
 
         return examples
 
-from transformers.examples.text_rank_reduction import Reduction
 class CosmosProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         """See base class."""
