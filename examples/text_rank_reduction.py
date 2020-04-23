@@ -181,16 +181,16 @@ class Reduction:
         return g.getRankedVertices()
 
     def reduce(self, text, reductionRatio):
-        stopWordsFile = './reduction/stopWords.txt'
+        stopWordsFile = '/content/transformers/examples/reduction/stopWords.txt'
         stopWords= open(stopWordsFile).read().splitlines()
 
         lines = text.splitlines()
-        print("lines", lines)
+        #print("lines", lines)
         contentLines = filter(lambda w: w.strip() != '', lines)
-        print("contentLines", contentLines)
+        #print("contentLines", contentLines)
 
         paragraphs = self.getParagraphs(contentLines, stopWords)
-        print("paragraphs", paragraphs)
+        #print("paragraphs", paragraphs)
 
         rankedSentences = self.sentenceRank(paragraphs)
 
