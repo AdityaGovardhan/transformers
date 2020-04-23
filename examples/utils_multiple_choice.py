@@ -324,7 +324,7 @@ class CosmosProcessor(DataProcessor):
             example = json.loads(line.strip("\n"))
 
             example_id = example["id"]
-            question = " ".join(reduction.reduce(example["question"],0.8))
+            question = example["question"] + " ".join(reduction.reduce(example["question"],0.7))
             context = example["context"]
             answer0 = example["answer0"]
             answer1 = example["answer1"]
