@@ -27,6 +27,7 @@ import tqdm
 
 from transformers import PreTrainedTokenizer
 from text_rank_reduction import Reduction
+from eazymind.nlp.eazysum import Summarizer
 
 
 logger = logging.getLogger(__name__)
@@ -292,20 +293,20 @@ class ArcProcessor(DataProcessor):
         return examples
 
 class CosmosProcessor(DataProcessor):
-    def get_train_examples(self, data_dir):
+    def get_train_examples(self, data_dir, summarization_type):
         """See base class."""
         logger.info("LOOKING AT {} train".format(data_dir))
-        return self._create_examples(self._read_json(os.path.join(data_dir, "train.jsonl")), "train")
+        return self._create_examples(self._read_json(os.path.join(data_dir, "train.jsonl")), "train", summarization_type)
 
-    def get_dev_examples(self, data_dir):
+    def get_dev_examples(self, data_dir, summarization_type):
         """See base class."""
         logger.info("LOOKING AT {} valid".format(data_dir))
-        return self._create_examples(self._read_json(os.path.join(data_dir, "valid.jsonl")), "valid")
+        return self._create_examples(self._read_json(os.path.join(data_dir, "valid.jsonl")), "valid", summarization_type)
 
-    def get_test_examples(self, data_dir):
+    def get_test_examples(self, data_dir, summarization_type):
         """See base class."""
         logger.info("LOOKING AT {} test".format(data_dir))
-        return self._create_examples(self._read_json(os.path.join(data_dir, "test.jsonl")), "test")
+        return self._create_examples(self._read_json(os.path.join(data_dir, "test.jsonl")), "test", summarization_type)
 
     def get_labels(self):
         """See base class."""
@@ -320,11 +321,19 @@ class CosmosProcessor(DataProcessor):
 
         examples = []
         reduction = Reduction()
+        key = "eafe5e5df9e4c6f3b5b7f3b9cc53efce"
         for line in tqdm.tqdm(lines, desc="read cosmos data"):
             example = json.loads(line.strip("\n"))
 
             example_id = example["id"]
-            question = example["question"] + " ".join(reduction.reduce(example["question"],0.7))
+            summarizer = Summarizer(key)
+            if(type==1):
+                summary = summarizer.run(example["question"])
+            elif(type==2):
+                summary = " ".join(reduction.reduce(example["question"],0.7))
+            else:
+                summary=""
+            question = example["question"] + summary
             context = example["context"]
             answer0 = example["answer0"]
             answer1 = example["answer1"]
