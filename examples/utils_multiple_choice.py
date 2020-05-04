@@ -317,7 +317,7 @@ class CosmosProcessor(DataProcessor):
             lines = fin.readlines()
             return lines
 
-    def _create_examples(self, lines, type):
+    def _create_examples(self, lines, type, summary_type):
 
         examples = []
         reduction = Reduction()
@@ -327,10 +327,10 @@ class CosmosProcessor(DataProcessor):
 
             example_id = example["id"]
             summarizer = Summarizer(key)
-            if(type==1):
-                summary = summarizer.run(example["question"])
-            elif(type==2):
+            if(summary_type==1):
                 summary = " ".join(reduction.reduce(example["question"],0.7))
+            elif(summary_type==2):
+                summary = summarizer.run(example["question"])
             else:
                 summary=""
             question = example["question"] + summary
